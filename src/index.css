@@ -11,3 +11,36 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+h2, p {
+  margin-top: 0;
+}
+
+.app {
+  height: 100vh;
+  /* background: yellow; */
+  /* position: relative; */
+}
+
+.quiz {
+  position: relative;
+}
+
+.worklet-canvas {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  --blob-seed: 123429;
+  --blob-num-points: 8;
+  --blob-variance: 0.5;
+  --blob-smoothness: 1;
+  --blob-fill: #7257fa;
+  width: 75vmin;
+  height: 75vmin;
+  background-image: paint(blob);
+}
+
+.question {
+  /* background: white; */
+}
