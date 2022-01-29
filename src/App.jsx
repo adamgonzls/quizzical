@@ -5,8 +5,13 @@ import logo from './img/logo.svg'
 import './App.css'
 
 function App () {
-  const [quizStart, setQuizStart] = useState(false)
+  const [quizStatus, setQuizStatus] = useState(false)
   const [count, setCount] = useState(0)
+
+  function handleStart () {
+    console.log('click')
+    setQuizStatus(true)
+  }
 
   useEffect(() => {
     ;(async function () {
@@ -27,22 +32,21 @@ function App () {
     <div className='app'>
       <div className='worklet-canvas' />
       <div className='quizboard'>
-        {quizStart
-          ? <>
+        {quizStatus
+          ? <div className='quiz'>
             <Question />
             <Question />
             <Question />
             <Question />
-            <p>
-              <button
-                type='button'
-                onClick={() => setCount((count) => count + 1)}
-              >
-                count is: {count}
-              </button>
-            </p>
-          </>
-          : <StartScreen />}
+            <button
+              className='submit-quiz'
+              type='button'
+              onClick={() => setCount((count) => count + 1)}
+            >
+              Check answers: {count}
+            </button>
+            </div>
+          : <StartScreen handleStart={handleStart} />}
       </div>
     </div>
   )

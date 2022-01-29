@@ -1,5 +1,10 @@
 :root {
+  --white-lilac: #f5f7fb;
+  --periwinkle-gray: #dbdef0;
+  --link-water: #d6dbf5;
+  --rhino: #293264;
   --kashmir-blue: #4d5b9e;
+  --body-font: 'Inter', sans-serif;
 }
 
 html {
@@ -12,9 +17,7 @@ html {
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: var(--body-font);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -24,8 +27,32 @@ code {
     monospace;
 }
 
-h2, p {
+h1, h2 {
   margin-top: 0;
+  font-family: 'Karla', sans-serif;
+  color: var(--rhino);
+}
+
+p {
+  margin-top: 0;
+}
+
+button {
+  border: none;
+  border-radius: 15px;
+  padding: 1em 3em;
+  font-family: var(--body-font);
+  color: var(--white-lilac);
+  background-color: var(--kashmir-blue);
+  transition-property: color, background-color;
+  transition-duration: .25s;
+  transition-timing-function: ease;
+}
+
+button:focus,
+button:hover {
+  color: var(--kashmir-blue);
+  background-color: var(--white-lilac);
 }
 
 .app {
@@ -33,19 +60,21 @@ h2, p {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* background: yellow; */
   position: relative;
 }
 
 .quizboard {
   border: 2px solid #f3f3f3;
-  /* position: relative; */
   background-color: rgba(253, 254, 254, .95);
   backdrop-filter: blur(5px);
   width: 90%;
   height: 90%;
   padding: 1em;
   border-radius: 10px;
+}
+
+.intro__tagline {
+  color: var(--rhino);
 }
 
 .start {
@@ -72,10 +101,41 @@ h2, p {
   background-image: paint(blob);
 }
 
-.question {
-  /* background: white; */
+.trivia__item {
+  border-bottom: 1px solid var(--periwinkle-gray);
+  padding-top: 1em;
 }
 
-.brand-button--primary {
-  background-color: var(--kashmir-blue);
+[class~='trivia__item']:last-of-type {
+  margin-bottom: 1.25em;
+}
+
+.trivia__question {
+  margin-bottom: .75em;
+}
+
+.trivia__answers {
+  margin-bottom: 1em;
+  padding-left: 0;
+  display: flex;
+  justify-content: flex-start;
+  gap: .75em;
+  list-style-type: none;
+  font-size: .75rem;
+}
+
+.trivia__answer {
+  border: 1px solid var(--kashmir-blue);
+  border-radius: 8px;
+  padding: .25em 1.25em;
+  color: var(--rhino);
+}
+
+.trivia__answer--selected {
+  background-color: var(--link-water);
+}
+
+.submit-quiz {
+  margin: 0 auto;
+  display: block;
 }
