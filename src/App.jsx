@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
+import StartScreen from './components/StartScreen'
 import Question from './components/Question'
 import logo from './img/logo.svg'
 import './App.css'
 
 function App () {
+  const [quizStart, setQuizStart] = useState(false)
   const [count, setCount] = useState(0)
 
   useEffect(() => {
@@ -23,17 +25,24 @@ function App () {
 
   return (
     <div className='app'>
-      <div className='quiz'>
-        <div className='worklet-canvas' />
-        <Question />
-        <Question />
-        <Question />
-        <Question />
-        <p>
-          <button type='button' onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
+      <div className='worklet-canvas' />
+      <div className='quizboard'>
+        {quizStart
+          ? <>
+            <Question />
+            <Question />
+            <Question />
+            <Question />
+            <p>
+              <button
+                type='button'
+                onClick={() => setCount((count) => count + 1)}
+              >
+                count is: {count}
+              </button>
+            </p>
+          </>
+          : <StartScreen />}
       </div>
     </div>
   )
