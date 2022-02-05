@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import StartScreen from './components/StartScreen'
 import TriviaItem from './components/TriviaItem'
+import { nanoid } from 'nanoid'
 import logo from './img/logo.svg'
 import './App.css'
 
@@ -11,12 +12,11 @@ function App () {
   const [count, setCount] = useState(0)
 
   function handleStart () {
-    console.log('click')
     setQuizStatus(true)
   }
 
   useEffect(() => {
-    fetch('https://opentdb.com/api.php?amount=1&category=9&type=multiple')
+    fetch('https://opentdb.com/api.php?amount=3&category=9&type=multiple')
       .then(res => res.json())
       .then(data => setQuizData(data.results))
   }, [])
@@ -27,14 +27,14 @@ function App () {
   }
 
   const triviaElements = quizData.map(item => {
-    console.log(item)
+    // console.log(item)
 
     const correctAnswer = item.correct_answer
     const incorrectAnswers = item.incorrect_answers
     const answerArray = incorrectAnswers.concat(correctAnswer)
     const shuffledAnswers = shuffleArray(answerArray)
 
-    console.log(shuffledAnswers)
+    // console.log(shuffledAnswers)
 
     const possibleAnswers = shuffledAnswers.map((answer, index) => {
       return (<li key={index} className='trivia__answer'>{answer}</li>)
@@ -42,6 +42,7 @@ function App () {
 
     return (
       <TriviaItem
+        key={nanoid()}
         correctAnswer={item.correct_answer}
         question={item.question}
         possibleAnswers={possibleAnswers}
@@ -62,7 +63,7 @@ function App () {
             >
               Check answers: {count}
             </button>
-          </div>
+            </div>
           : <StartScreen handleStart={handleStart} />}
       </div>
     </div>
