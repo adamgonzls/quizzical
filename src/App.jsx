@@ -28,11 +28,14 @@ function App () {
 
   const triviaElements = quizData.map(item => {
     console.log(item)
+
     const correctAnswer = item.correct_answer
     const incorrectAnswers = item.incorrect_answers
     const answerArray = incorrectAnswers.concat(correctAnswer)
     const shuffledAnswers = shuffleArray(answerArray)
+
     console.log(shuffledAnswers)
+
     const possibleAnswers = shuffledAnswers.map((answer, index) => {
       return (<li key={index} className='trivia__answer'>{answer}</li>)
     })
@@ -59,7 +62,7 @@ function App () {
             >
               Check answers: {count}
             </button>
-            </div>
+          </div>
           : <StartScreen handleStart={handleStart} />}
       </div>
     </div>
