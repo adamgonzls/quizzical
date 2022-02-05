@@ -1,3 +1,5 @@
+import TriviaAnswers from './TriviaAnswers'
+
 export default function TriviaItem (props) {
   return (
     <div className='trivia__item'>

@@ -18,34 +18,44 @@ function App () {
   useEffect(() => {
     fetch('https://opentdb.com/api.php?amount=3&category=9&type=multiple')
       .then(res => res.json())
-      .then(data => setQuizData(data.results))
+      .then(data => handleQuizData(data.results))
   }, [])
 
-  function shuffleArray (answerArray) {
+  function handleQuizData (data) {
+    const quizItems = data.map(quizItem => ({
+      ...quizItem,
+      id: nanoid(),
+      all_answers: getAllAnswers(quizItem)
+    }))
+    // console.log(quizItems)
+    setQuizData(quizItems)
+  }
+
+  function getAllAnswers (quizItem) {
+    const correctAnswer = quizItem.correct_answer
+    const incorrectAnswers = quizItem.incorrect_answers
+    const answerArray = incorrectAnswers.concat(correctAnswer)
     const sortedArray = answerArray.sort(() => Math.random() - 0.5)
-    return sortedArray
+    const answersObject = sortedArray.map(item => ({
+      value: item,
+      isSelected: false,
+      id: nanoid()
+    }))
+    // console.log(answersObject)
+    return answersObject
   }
 
   const triviaElements = quizData.map(item => {
-    // console.log(item)
-
-    const correctAnswer = item.correct_answer
-    const incorrectAnswers = item.incorrect_answers
-    const answerArray = incorrectAnswers.concat(correctAnswer)
-    const shuffledAnswers = shuffleArray(answerArray)
-
-    // console.log(shuffledAnswers)
-
-    const possibleAnswers = shuffledAnswers.map((answer, index) => {
-      return (<li key={index} className='trivia__answer'>{answer}</li>)
+    const answerElements = item.all_answers.map(answer => {
+      return (<li key={answer.id} className='trivia__answer'>{answer.value}</li>)
     })
 
     return (
       <TriviaItem
-        key={nanoid()}
+        key={item.id}
         correctAnswer={item.correct_answer}
         question={item.question}
-        possibleAnswers={possibleAnswers}
+        possibleAnswers={answerElements}
       />
     )
   })
