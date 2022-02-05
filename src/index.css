@@ -16,6 +16,7 @@ html {
 }
 
 body {
+  height: 100vh;
   margin: 0;
   font-family: var(--body-font);
   -webkit-font-smoothing: antialiased;
@@ -55,22 +56,26 @@ button:hover {
   background-color: var(--white-lilac);
 }
 
+#root {
+  height: 100%;
+}
+
 .app {
-  height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: relative;
+  height: 100%;
 }
 
 .quizboard {
-  border: 2px solid #f3f3f3;
+  margin: 1em;
+  padding: 1em;
   background-color: rgba(253, 254, 254, .95);
   backdrop-filter: blur(5px);
   width: 90%;
-  height: 90%;
-  padding: 1em;
   border-radius: 10px;
+  overflow: scroll
 }
 
 .intro__tagline {
@@ -84,21 +89,6 @@ button:hover {
   justify-content: center;
   align-content: center;
   align-items: center;
-}
-
-.worklet-canvas {
-  position: absolute;
-  z-index: -1;
-  bottom: -100px;
-  left: -100px;
-  --blob-seed: 123429;
-  --blob-num-points: 8;
-  --blob-variance: 0.5;
-  --blob-smoothness: 1;
-  --blob-fill: #7257fa;
-  width: 65vmin;
-  height: 65vmin;
-  background-image: paint(blob);
 }
 
 .trivia__item {
@@ -129,6 +119,7 @@ button:hover {
   border-radius: 8px;
   padding: .25em 1.25em;
   color: var(--rhino);
+  cursor: pointer;
 }
 
 .trivia__answer--selected {

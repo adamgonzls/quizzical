@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import StartScreen from './components/StartScreen'
-import Question from './components/Question'
+import TriviaItem from './components/TriviaItem'
 import logo from './img/logo.svg'
 import './App.css'
 
 function App () {
   const [quizStatus, setQuizStatus] = useState(false)
+  const [quizData, setQuizData] = useState([])
+
   const [count, setCount] = useState(0)
 
   function handleStart () {
@@ -14,30 +16,42 @@ function App () {
   }
 
   useEffect(() => {
-    ;(async function () {
-      if (CSS.paintWorklet === undefined) {
-        await import('https://unpkg.com/css-paint-polyfill')
-      }
+    fetch('https://opentdb.com/api.php?amount=1&category=9&type=multiple')
+      .then(res => res.json())
+      .then(data => setQuizData(data.results))
+  }, [])
 
-      CSS.paintWorklet.addModule(
-        'https://unpkg.com/@georgedoescode/houdini-random-blobs'
-      )
-      document
-        .querySelector('.worklet-canvas')
-        .style.setProperty('--blob-seed', Math.random() * 10000)
-    })()
+  function shuffleArray (answerArray) {
+    const sortedArray = answerArray.sort(() => Math.random() - 0.5)
+    return sortedArray
+  }
+
+  const triviaElements = quizData.map(item => {
+    console.log(item)
+    const correctAnswer = item.correct_answer
+    const incorrectAnswers = item.incorrect_answers
+    const answerArray = incorrectAnswers.concat(correctAnswer)
+    const shuffledAnswers = shuffleArray(answerArray)
+    console.log(shuffledAnswers)
+    const possibleAnswers = shuffledAnswers.map((answer, index) => {
+      return (<li key={index} className='trivia__answer'>{answer}</li>)
+    })
+
+    return (
+      <TriviaItem
+        correctAnswer={item.correct_answer}
+        question={item.question}
+        possibleAnswers={possibleAnswers}
+      />
+    )
   })
 
   return (
     <div className='app'>
-      <div className='worklet-canvas' />
       <div className='quizboard'>
         {quizStatus
           ? <div className='quiz'>
-            <Question />
-            <Question />
-            <Question />
-            <Question />
+            {triviaElements}
             <button
               className='submit-quiz'
               type='button'
