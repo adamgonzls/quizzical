@@ -6,30 +6,31 @@ import logo from './img/logo.svg'
 import './App.css'
 
 function App () {
-  const [quizStatus, setQuizStatus] = useState(false)
-  const [quizData, setQuizData] = useState([])
+  const [quizStart, setQuizStart] = useState(false)
+  const [allQuizData, setAllQuizData] = useState([])
 
   const [count, setCount] = useState(0)
 
   function handleStart () {
-    setQuizStatus(true)
+    setQuizStart(true)
   }
 
   useEffect(() => {
     fetch('https://opentdb.com/api.php?amount=3&category=9&type=multiple')
       .then(res => res.json())
-      .then(data => handleQuizData(data.results))
+      .then(data => normalizeQuizData(data.results))
   }, [])
 
-  function handleQuizData (data) {
+  function normalizeQuizData (data) {
     const quizItems = data.map(quizItem => ({
       ...quizItem,
-      id: nanoid(),
+      Id: nanoid(),
       all_answers: getAllAnswers(quizItem),
-      selected: null
+      selected_answer_Id: null
+      // selected: null
     }))
-    console.log(quizItems)
-    setQuizData(quizItems)
+    // console.log(quizItems)
+    setAllQuizData(quizItems)
   }
 
   function getAllAnswers (quizItem) {
@@ -39,39 +40,40 @@ function App () {
     const sortedArray = answerArray.sort(() => Math.random() - 0.5)
     const answersObject = sortedArray.map(item => ({
       value: item,
-      // isSelected: true,
-      id: nanoid()
+      // selected: true,
+      Id: nanoid()
     }))
     // console.log(answersObject)
     return answersObject
   }
 
-  function handleAnswer (questionId, answerId) {
-    console.log(`clicked answer ${answerId} ${questionId}`)
-    const i = quizData.findIndex((question) => question.id === questionId)
-    console.log(i)
+  function handleSelectedAnswer (questionId, answerId) {
+    console.log(`clicked answer ${questionId} ${answerId}`)
+    const questionIndex = allQuizData.findIndex((question) => question.Id === questionId)
+    // console.log(questionIndex)
 
+    setAllQuizData(prevData => prevData.map((triviaItem) => {
+      console.log(triviaItem)
+      // console.log(answerId)
+      return questionId === triviaItem.Id
+        ? { ...triviaItem, selected_answer_Id: answerId }
+        : triviaItem
+    }))
 
-
-    //
-    // setQuizData(prevData => prevData.map((dataItem, index) => {
-    // console.log(dataItem)
-    // const answersArray = dataItem.all_answers
-    // return dataItem.all_answers[index].id === id
-    //   ? { ...dataItem.all_answers, isSelected: !dataItem.all_answers[index].isSelected } : dataItem
-    // }))
+    console.log('it ran')
   }
 
-  const triviaElements = quizData.map(question => {
-    // console.log(question)
+  const triviaElements = allQuizData.map(triviaItem => {
+    // console.log(triviaItem)
     return (
       <TriviaItem
-        key={question.id}
-        questionId={question.id}
-        correctAnswer={question.correct_answer}
-        question={question.question}
-        possibleAnswers={question.all_answers}
-        handleAnswer={handleAnswer}
+        key={triviaItem.Id}
+        triviaItemId={triviaItem.Id}
+        correctAnswer={triviaItem.correct_answer}
+        question={triviaItem.question}
+        possibleAnswers={triviaItem.all_answers}
+        handleSelectedAnswer={handleSelectedAnswer}
+        selectedAnswerId={triviaItem.selected_answer_Id}
       />
     )
   })
@@ -79,7 +81,7 @@ function App () {
   return (
     <div className='app'>
       <div className='quizboard'>
-        {quizStatus
+        {quizStart
           ? <div className='quiz'>
             {triviaElements}
             <button

@@ -1,22 +1,23 @@
 // import TriviaAnswers from './TriviaAnswers'
 
-export default function TriviaItem ({ questionId, correctAnswer, question, possibleAnswers, handleAnswer }) {
-  // console.log(props)
+export default function TriviaItem ({ triviaItemId, correctAnswer, question, possibleAnswers, handleSelectedAnswer, selectedAnswerId }) {
+  // console.log(selectedAnswerId)
 
   const answerElements = possibleAnswers.map(answer => {
     // console.log(answer)
+
     const styles = {
-      backgroundColor: answer.isSelected ? 'green' : 'red'
+      backgroundColor: answer.Id === selectedAnswerId ? 'green' : 'red'
     }
 
     return (
       <li
-        key={answer.id}
-        isSelected={answer.isSelected}
+        key={answer.Id}
+        selected={answer.selected}
         className='trivia__answer'
         style={styles}
-        // onClick={() => handleClick(answer.id)}
-        onClick={() => handleAnswer(questionId, answer.id)}
+        // onClick={() => handleClick(answer.Id)}
+        onClick={() => handleSelectedAnswer(triviaItemId, answer.Id)}
       >
         {answer.value}
       </li>
