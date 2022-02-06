@@ -25,9 +25,10 @@ function App () {
     const quizItems = data.map(quizItem => ({
       ...quizItem,
       id: nanoid(),
-      all_answers: getAllAnswers(quizItem)
+      all_answers: getAllAnswers(quizItem),
+      selected: null
     }))
-    // console.log(quizItems)
+    console.log(quizItems)
     setQuizData(quizItems)
   }
 
@@ -38,24 +39,39 @@ function App () {
     const sortedArray = answerArray.sort(() => Math.random() - 0.5)
     const answersObject = sortedArray.map(item => ({
       value: item,
-      isSelected: false,
+      // isSelected: true,
       id: nanoid()
     }))
     // console.log(answersObject)
     return answersObject
   }
 
-  const triviaElements = quizData.map(item => {
-    const answerElements = item.all_answers.map(answer => {
-      return (<li key={answer.id} className='trivia__answer'>{answer.value}</li>)
-    })
+  function handleAnswer (questionId, answerId) {
+    console.log(`clicked answer ${answerId} ${questionId}`)
+    const i = quizData.findIndex((question) => question.id === questionId)
+    console.log(i)
 
+
+
+    //
+    // setQuizData(prevData => prevData.map((dataItem, index) => {
+    // console.log(dataItem)
+    // const answersArray = dataItem.all_answers
+    // return dataItem.all_answers[index].id === id
+    //   ? { ...dataItem.all_answers, isSelected: !dataItem.all_answers[index].isSelected } : dataItem
+    // }))
+  }
+
+  const triviaElements = quizData.map(question => {
+    // console.log(question)
     return (
       <TriviaItem
-        key={item.id}
-        correctAnswer={item.correct_answer}
-        question={item.question}
-        possibleAnswers={answerElements}
+        key={question.id}
+        questionId={question.id}
+        correctAnswer={question.correct_answer}
+        question={question.question}
+        possibleAnswers={question.all_answers}
+        handleAnswer={handleAnswer}
       />
     )
   })
@@ -73,7 +89,7 @@ function App () {
             >
               Check answers: {count}
             </button>
-            </div>
+          </div>
           : <StartScreen handleStart={handleStart} />}
       </div>
     </div>
