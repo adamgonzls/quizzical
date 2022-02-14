@@ -3,12 +3,20 @@
 export default function TriviaItem ({ triviaItemId, correctAnswer, question, possibleAnswers, handleSelectedAnswer, selectedAnswerId }) {
   // console.log(selectedAnswerId)
 
+  const selectedAnswerStyles = {
+    backgroundColor: 'var(--link-water)',
+    borderColor: 'var(--link-water)'
+  }
+
+  const nonSelectedAnswerStyles = {
+    backgroundColor: 'transparent',
+    borderColor: 'var(--kashmir-blue)'
+  }
+
   const answerElements = possibleAnswers.map(answer => {
     // console.log(answer)
 
-    const styles = {
-      backgroundColor: answer.Id === selectedAnswerId ? 'green' : 'red'
-    }
+    const styles = answer.Id === selectedAnswerId ? selectedAnswerStyles : nonSelectedAnswerStyles
 
     return (
       <li

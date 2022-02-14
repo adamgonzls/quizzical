@@ -9,8 +9,6 @@ function App () {
   const [quizStart, setQuizStart] = useState(false)
   const [allQuizData, setAllQuizData] = useState([])
 
-  const [count, setCount] = useState(0)
-
   function handleStart () {
     setQuizStart(true)
   }
@@ -48,7 +46,7 @@ function App () {
   }
 
   function handleSelectedAnswer (questionId, answerId) {
-    console.log(`clicked answer ${questionId} ${answerId}`)
+    // console.log(`clicked answer ${questionId} ${answerId}`)
     const questionIndex = allQuizData.findIndex((question) => question.Id === questionId)
     // console.log(questionIndex)
 
@@ -59,8 +57,10 @@ function App () {
         ? { ...triviaItem, selected_answer_Id: answerId }
         : triviaItem
     }))
+  }
 
-    console.log('it ran')
+  function checkAnswers () {
+    console.log('check answers')
   }
 
   const triviaElements = allQuizData.map(triviaItem => {
@@ -87,11 +87,11 @@ function App () {
             <button
               className='submit-quiz'
               type='button'
-              onClick={() => setCount((count) => count + 1)}
+              onClick={checkAnswers}
             >
-              Check answers: {count}
+              Check answers
             </button>
-          </div>
+            </div>
           : <StartScreen handleStart={handleStart} />}
       </div>
     </div>
