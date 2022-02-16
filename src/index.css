@@ -125,6 +125,8 @@ button:active {
 }
 
 .trivia__answer {
+  display: flex;
+  align-items: center;
   border: 1px solid var(--kashmir-blue);
   border-radius: 8px;
   padding: .25em 1.25em;

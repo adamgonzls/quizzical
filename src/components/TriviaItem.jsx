@@ -1,7 +1,7 @@
 // import TriviaAnswers from './TriviaAnswers'
 
 export default function TriviaItem ({ triviaItemId, correctAnswer, question, possibleAnswers, handleSelectedAnswer, selectedAnswerId }) {
-  // console.log(selectedAnswerId)
+  console.log(selectedAnswerId)
 
   const selectedAnswerStyles = {
     backgroundColor: 'var(--link-water)',
