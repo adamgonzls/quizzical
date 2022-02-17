@@ -7,14 +7,18 @@ import './App.css'
 
 function App () {
   const [quizStatus, setQuizStatus] = useState({
+    quizTryNumber: 1,
     inProgress: false,
     statusString: ''
   })
   const [allQuizData, setAllQuizData] = useState([])
 
   function handleStart (resultsString = '') {
+    console.log('handleStart')
+    // console.log(quizStatus)
     setQuizStatus(prevData => ({
-      inProgress: !prevData.inProgress,
+      ...prevData,
+      inProgress: true,
       statusString: resultsString
     }))
   }
@@ -23,7 +27,7 @@ function App () {
     fetch('https://opentdb.com/api.php?amount=3&category=9&type=multiple')
       .then(res => res.json())
       .then(data => normalizeQuizData(data.results))
-  }, [])
+  }, [quizStatus.quizTryNumber])
 
   function normalizeQuizData (data) {
     const quizItemsNormalized = data.map(quizItem => ({
@@ -45,9 +49,7 @@ function App () {
   }
 
   function getAnswersArr (quizItem) {
-    // console.log(quizItem)
     const correctAnswer = quizItem.correctAnswerObj
-    // console.log(correctAnswer)
     const incorrectAnswers = quizItem.incorrectAnswersArr
     const incorrectAnswerObjects = incorrectAnswers.map(item => ({
       Id: nanoid(),
@@ -67,26 +69,34 @@ function App () {
   }
 
   function checkAnswers () {
-    // console.log(allQuizData)
     let correctAnswerAmount = 0
     const numberOfQuestions = allQuizData.length
     allQuizData.forEach((quizItem, index) => {
-      // console.log(quizItem)
       if (quizItem.selectedAnswerId === quizItem.correctAnswerObj.Id) {
         correctAnswerAmount++
       }
     })
     const resultsString = `you scored ${correctAnswerAmount} / ${numberOfQuestions} correct answers`
-    console.log(resultsString)
     setQuizStatus(prevData => ({
-      inProgress: !prevData,
+      ...prevData,
+      inProgress: false,
       statusString: resultsString
     }))
-    return resultsString
+    console.log('finished the game')
+  }
+
+  function restartGame () {
+    // console.log('restart the game')
+    setQuizStatus(prevData => ({
+      quizTryNumber: prevData.quizTryNumber + 1,
+      inProgress: true,
+      statusString: ''
+    }))
+    console.log('restarted game')
+    console.log(quizStatus)
   }
 
   const triviaElements = allQuizData.map(triviaItem => {
-    // console.log(triviaItem)
     return (
       <TriviaItem
         key={triviaItem.triviaQuestionId}
@@ -96,6 +106,7 @@ function App () {
         possibleAnswers={triviaItem.allAnswersArr}
         handleSelectedAnswer={handleSelectedAnswer}
         selectedAnswerId={triviaItem.selectedAnswerId}
+        quizStatus={quizStatus.inProgress}
       />
     )
   })
@@ -107,14 +118,14 @@ function App () {
           ? <div className='quiz'>
             {triviaElements}
             <div className='quiz__status'>
-              {quizStatus.statusString.length &&
+              {quizStatus.statusString.length > 0 &&
                 <h3>
                   {quizStatus.statusString}
                 </h3>}
               <button
                 className='quiz__submit'
                 type='button'
-                onClick={quizStatus.inProgress ? checkAnswers : checkAnswers}
+                onClick={quizStatus.inProgress ? checkAnswers : restartGame}
               >
                 {quizStatus.inProgress ? 'Check answers' : 'Play Again'}
               </button>

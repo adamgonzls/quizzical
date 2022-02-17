@@ -1,4 +1,4 @@
-export default function TriviaItem ({ triviaItemId, correctAnswer, question, possibleAnswers, handleSelectedAnswer, selectedAnswerId }) {
+export default function TriviaItem ({ triviaItemId, correctAnswer, question, possibleAnswers, handleSelectedAnswer, selectedAnswerId, quizStatus }) {
   const selectedAnswerStyles = {
     backgroundColor: 'var(--link-water)',
     borderColor: 'var(--link-water)'
@@ -7,6 +7,13 @@ export default function TriviaItem ({ triviaItemId, correctAnswer, question, pos
   const nonSelectedAnswerStyles = {
     backgroundColor: 'transparent',
     borderColor: 'var(--kashmir-blue)'
+  }
+
+  if (!quizStatus) {
+    const correctAnswerStyle = {
+      backgroundColor: 'var(--non-selected-correct-answer)',
+      borderColor: 'var(--non-selected-correct-answer)'
+    }
   }
 
   const answerElements = possibleAnswers.map(answer => {
