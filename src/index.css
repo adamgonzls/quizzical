@@ -30,7 +30,7 @@ code {
     monospace;
 }
 
-h1, h2 {
+h1, h2, h3 {
   margin-top: 0;
   font-family: 'Karla', sans-serif;
   color: var(--rhino);
@@ -88,6 +88,18 @@ button:active {
   overflow: scroll
 }
 
+.quiz__status {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2em
+}
+
+.quiz__submit {
+  /* margin: 0 auto;
+  display: block; */
+}
+
 .intro__tagline {
   color: var(--rhino);
 }
@@ -102,16 +114,18 @@ button:active {
 }
 
 .trivia__item {
+  margin-bottom: .9375em;
   border-bottom: 1px solid var(--periwinkle-gray);
-  padding-top: 1em;
 }
 
-[class~='trivia__item']:last-of-type {
+.quiz .trivia__item:last-of-type {
   margin-bottom: 1.25em;
+  border-bottom: 2px solid red;
+  background: red;
 }
 
 .trivia__question {
-  margin-bottom: .75em;
+  margin-bottom: .625em;
 }
 
 .trivia__answers {
@@ -137,9 +151,4 @@ button:active {
 
 .trivia__answer--selected {
   background-color: var(--link-water);
-}
-
-.submit-quiz {
-  margin: 0 auto;
-  display: block;
 }

@@ -6,11 +6,17 @@ import logo from './img/logo.svg'
 import './App.css'
 
 function App () {
-  const [quizStart, setQuizStart] = useState(false)
+  const [quizStatus, setQuizStatus] = useState({
+    inProgress: false,
+    statusString: ''
+  })
   const [allQuizData, setAllQuizData] = useState([])
 
-  function handleStart () {
-    setQuizStart(true)
+  function handleStart (resultsString = '') {
+    setQuizStatus(prevData => ({
+      inProgress: !prevData.inProgress,
+      statusString: resultsString
+    }))
   }
 
   useEffect(() => {
@@ -20,16 +26,6 @@ function App () {
   }, [])
 
   function normalizeQuizData (data) {
-    // const quizItems = data.map(quizItem => ({
-    //   ...quizItem,
-    //   Id: nanoid(),
-    //   correctAnswerObj: {
-    //     Id: 1,
-    //     value: 'string'
-    //   },
-    //   all_answers: getAllAnswers(quizItem),
-    //   selected_answer_Id: null
-    // }))
     const quizItemsNormalized = data.map(quizItem => ({
       triviaQuestionId: nanoid(),
       question: quizItem.question,
@@ -44,57 +40,49 @@ function App () {
       ...quizItem,
       allAnswersArr: getAnswersArr(quizItem)
     }))
-    console.log(quizItems)
+    // console.log(quizItems)
     setAllQuizData(quizItems)
   }
 
   function getAnswersArr (quizItem) {
-    console.log(quizItem)
+    // console.log(quizItem)
     const correctAnswer = quizItem.correctAnswerObj
-    console.log(correctAnswer)
+    // console.log(correctAnswer)
     const incorrectAnswers = quizItem.incorrectAnswersArr
     const incorrectAnswerObjects = incorrectAnswers.map(item => ({
       Id: nanoid(),
       value: item
     }))
     const answerArr = incorrectAnswerObjects.concat(correctAnswer)
-    // console.log(answerArr)
     const randomizedAnswerArr = answerArr.sort(() => Math.random() - 0.5)
-    // console.log(randomizedAnswerArr)
     return randomizedAnswerArr
   }
 
-  // function getAllAnswers (quizItem) {
-  //   // console.log(quizItem)
-  //   const correctAnswer = quizItem.correct_answer
-  //   const incorrectAnswers = quizItem.incorrect_answers
-  //   const answerArray = incorrectAnswers.concat(correctAnswer)
-  //   const sortedArray = answerArray.sort(() => Math.random() - 0.5)
-  //   const answersObject = sortedArray.map(item => ({
-  //     value: item,
-  //     Id: nanoid()
-  //   }))
-  //   return answersObject
-  // }
-
   function handleSelectedAnswer (questionId, answerId) {
-    console.log(`clicked answer ${questionId} ${answerId}`)
-    const questionIndex = allQuizData.findIndex((question) => question.Id === questionId)
-    // console.log(questionIndex)
-
     setAllQuizData(prevData => prevData.map((triviaItem) => {
-      // console.log(triviaItem)
-      // console.log(answerId)
-      return questionId === triviaItem.Id
-        ? { ...triviaItem, selected_answer_Id: answerId }
+      return questionId === triviaItem.triviaQuestionId
+        ? { ...triviaItem, selectedAnswerId: answerId }
         : triviaItem
     }))
   }
 
   function checkAnswers () {
-    console.log('check answers')
     // console.log(allQuizData)
-    allQuizData.forEach(element => console.log(element))
+    let correctAnswerAmount = 0
+    const numberOfQuestions = allQuizData.length
+    allQuizData.forEach((quizItem, index) => {
+      // console.log(quizItem)
+      if (quizItem.selectedAnswerId === quizItem.correctAnswerObj.Id) {
+        correctAnswerAmount++
+      }
+    })
+    const resultsString = `you scored ${correctAnswerAmount} / ${numberOfQuestions} correct answers`
+    console.log(resultsString)
+    setQuizStatus(prevData => ({
+      inProgress: !prevData,
+      statusString: resultsString
+    }))
+    return resultsString
   }
 
   const triviaElements = allQuizData.map(triviaItem => {
@@ -115,16 +103,22 @@ function App () {
   return (
     <div className='app'>
       <div className='quizboard'>
-        {quizStart
+        {quizStatus.inProgress || quizStatus.statusString
           ? <div className='quiz'>
             {triviaElements}
-            <button
-              className='submit-quiz'
-              type='button'
-              onClick={checkAnswers}
-            >
-              Check answers
-            </button>
+            <div className='quiz__status'>
+              {quizStatus.statusString.length &&
+                <h3>
+                  {quizStatus.statusString}
+                </h3>}
+              <button
+                className='quiz__submit'
+                type='button'
+                onClick={quizStatus.inProgress ? checkAnswers : checkAnswers}
+              >
+                {quizStatus.inProgress ? 'Check answers' : 'Play Again'}
+              </button>
+            </div>
             </div>
           : <StartScreen handleStart={handleStart} />}
       </div>
