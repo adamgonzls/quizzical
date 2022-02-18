@@ -4,20 +4,24 @@ export default function TriviaItem ({ triviaItemId, correctAnswer, question, pos
     borderColor: 'var(--link-water)'
   }
 
-  const nonSelectedAnswerStyles = {
+  const defaultAnswerStyles = {
     backgroundColor: 'transparent',
     borderColor: 'var(--kashmir-blue)'
   }
 
-  if (!quizStatus) {
-    const correctAnswerStyle = {
-      backgroundColor: 'var(--non-selected-correct-answer)',
-      borderColor: 'var(--non-selected-correct-answer)'
-    }
+  const nonSelectedCorrectAnswerStyle = {
+    backgroundColor: 'var(--non-selected-correct-answer)',
+    borderColor: 'var(--non-selected-correct-answer)'
   }
 
   const answerElements = possibleAnswers.map(answer => {
-    const styles = answer.Id === selectedAnswerId ? selectedAnswerStyles : nonSelectedAnswerStyles
+    let styles = answer.Id === selectedAnswerId ? selectedAnswerStyles : defaultAnswerStyles
+
+    if (!quizStatus) {
+      if ((answer.Id === correctAnswer.Id) && (answer.Id !== selectedAnswerId)) {
+        styles = nonSelectedCorrectAnswerStyle
+      }
+    }
 
     return (
       <li

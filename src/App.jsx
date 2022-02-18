@@ -14,8 +14,6 @@ function App () {
   const [allQuizData, setAllQuizData] = useState([])
 
   function handleStart (resultsString = '') {
-    console.log('handleStart')
-    // console.log(quizStatus)
     setQuizStatus(prevData => ({
       ...prevData,
       inProgress: true,
@@ -44,7 +42,6 @@ function App () {
       ...quizItem,
       allAnswersArr: getAnswersArr(quizItem)
     }))
-    // console.log(quizItems)
     setAllQuizData(quizItems)
   }
 
@@ -82,18 +79,14 @@ function App () {
       inProgress: false,
       statusString: resultsString
     }))
-    console.log('finished the game')
   }
 
   function restartGame () {
-    // console.log('restart the game')
     setQuizStatus(prevData => ({
       quizTryNumber: prevData.quizTryNumber + 1,
       inProgress: true,
       statusString: ''
     }))
-    console.log('restarted game')
-    console.log(quizStatus)
   }
 
   const triviaElements = allQuizData.map(triviaItem => {
