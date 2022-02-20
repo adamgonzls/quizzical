@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import StartScreen from './components/StartScreen'
 import TriviaItem from './components/TriviaItem'
 import { nanoid } from 'nanoid'
+import he from 'he'
 import logo from './img/logo.svg'
 import './App.css'
 
@@ -22,7 +23,7 @@ function App () {
   }
 
   useEffect(() => {
-    fetch('https://opentdb.com/api.php?amount=3&category=9&type=multiple')
+    fetch('https://opentdb.com/api.php?amount=10&category=9&type=multiple')
       .then(res => res.json())
       .then(data => normalizeQuizData(data.results))
   }, [quizStatus.quizTryNumber])
@@ -30,10 +31,10 @@ function App () {
   function normalizeQuizData (data) {
     const quizItemsNormalized = data.map(quizItem => ({
       triviaQuestionId: nanoid(),
-      question: quizItem.question,
+      question: he.decode(quizItem.question),
       correctAnswerObj: {
         Id: nanoid(),
-        value: quizItem.correct_answer
+        value: he.decode(quizItem.correct_answer)
       },
       incorrectAnswersArr: quizItem.incorrect_answers,
       selectedAnswerId: null
@@ -50,7 +51,7 @@ function App () {
     const incorrectAnswers = quizItem.incorrectAnswersArr
     const incorrectAnswerObjects = incorrectAnswers.map(item => ({
       Id: nanoid(),
-      value: item
+      value: he.decode(item)
     }))
     const answerArr = incorrectAnswerObjects.concat(correctAnswer)
     const randomizedAnswerArr = answerArr.sort(() => Math.random() - 0.5)
@@ -81,15 +82,23 @@ function App () {
     }))
   }
 
+  function scrollToTopTriviaItem() {
+    const triviaElements = document.getElementsByClassName('trivia__item')
+    const firstTriviaElement = triviaElements[0]
+    firstTriviaElement.scrollIntoView()
+  }
+
   function restartGame () {
     setQuizStatus(prevData => ({
       quizTryNumber: prevData.quizTryNumber + 1,
       inProgress: true,
       statusString: ''
     }))
+    scrollToTopTriviaItem()
   }
 
   const triviaElements = allQuizData.map(triviaItem => {
+
     return (
       <TriviaItem
         key={triviaItem.triviaQuestionId}
