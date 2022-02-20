@@ -6,6 +6,10 @@ Quiz questions via JSON API from [Open Trivia Database](https://opentdb.com/api_
 
 Figma [design file](<https://www.figma.com/file/9yP5noyFXf3g7n5ETEqNH6/Quizzical-App-(Copy)?node-id=0%3A1>)
 
+Deployed using [Vercel](https://vercel.com/)
+
+[Check it out:](https://quizzical-alpha.vercel.app/)
+
 ```
 // install dependencies
 npm install
