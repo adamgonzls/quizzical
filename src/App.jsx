@@ -23,7 +23,7 @@ function App () {
   }
 
   useEffect(() => {
-    fetch('https://opentdb.com/api.php?amount=10&category=9&type=multiple')
+    fetch('https://opentdb.com/api.php?amount=5&category=9&type=multiple')
       .then(res => res.json())
       .then(data => normalizeQuizData(data.results))
   }, [quizStatus.quizTryNumber])
