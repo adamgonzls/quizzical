@@ -8,7 +8,7 @@ Figma [design file](<https://www.figma.com/file/9yP5noyFXf3g7n5ETEqNH6/Quizzical
 
 Deployed using [Vercel](https://vercel.com/)
 
-Check it out:[Quizzical](https://quizzical-alpha.vercel.app/)
+Check it out: [Quizzical](https://quizzical-alpha.vercel.app/)
 
 ```
 // install dependencies
