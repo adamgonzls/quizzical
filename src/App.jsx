@@ -3,7 +3,6 @@ import StartScreen from './components/StartScreen'
 import TriviaItem from './components/TriviaItem'
 import { nanoid } from 'nanoid'
 import he from 'he'
-import logo from './img/logo.svg'
 import './App.css'
 
 function App () {
@@ -82,7 +81,7 @@ function App () {
     }))
   }
 
-  function scrollToTopTriviaItem() {
+  function scrollToTopTriviaItem () {
     const triviaElements = document.getElementsByClassName('trivia__item')
     const firstTriviaElement = triviaElements[0]
     firstTriviaElement.scrollIntoView()
@@ -98,7 +97,6 @@ function App () {
   }
 
   const triviaElements = allQuizData.map(triviaItem => {
-
     return (
       <TriviaItem
         key={triviaItem.triviaQuestionId}
